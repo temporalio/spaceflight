@@ -1,0 +1,63 @@
+version = 1
+requires-python = ">=3.12"
+
+[[package]]
+name = "protobuf"
+version = "5.27.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/1b/61/0671db2ab2aee7c92d6c1b617c39b30a4cd973950118da56d77e7f397a9d/protobuf-5.27.3.tar.gz", hash = "sha256:82460903e640f2b7e34ee81a947fdaad89de796d324bcbc38ff5430bcdead82c", size = 401665 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cd/6d/a8a4b84aaf83d6cb552247e1da2fa07140bbda894bbaf0d5afddec4699df/protobuf-5.27.3-cp310-abi3-win32.whl", hash = "sha256:dcb307cd4ef8fec0cf52cb9105a03d06fbb5275ce6d84a6ae33bc6cf84e0a07b", size = 405837 },
+    { url = "https://files.pythonhosted.org/packages/a4/30/cb5395acd5f65edc0dee77bdd134fe556c52fade2ad3ea9ac2676d01effe/protobuf-5.27.3-cp310-abi3-win_amd64.whl", hash = "sha256:16ddf3f8c6c41e1e803da7abea17b1793a97ef079a912e42351eabb19b2cffe7", size = 426928 },
+    { url = "https://files.pythonhosted.org/packages/ca/bc/bceb11aa96dd0b2ae7002d2f46870fbdef7649a0c28420f0abb831ee3294/protobuf-5.27.3-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:68248c60d53f6168f565a8c76dc58ba4fa2ade31c2d1ebdae6d80f969cdc2d4f", size = 412255 },
+    { url = "https://files.pythonhosted.org/packages/d9/83/a610396958a5b735e988880a0fdb5cde80b95111eb550849a5bd5cff735d/protobuf-5.27.3-cp38-abi3-manylinux2014_aarch64.whl", hash = "sha256:b8a994fb3d1c11156e7d1e427186662b64694a62b55936b2b9348f0a7c6625ce", size = 307150 },
+    { url = "https://files.pythonhosted.org/packages/4c/98/db690e43e2f28495c8fc7c997003cbd59a6db342914b404e216c9b6791f0/protobuf-5.27.3-cp38-abi3-manylinux2014_x86_64.whl", hash = "sha256:a55c48f2a2092d8e213bd143474df33a6ae751b781dd1d1f4d953c128a415b25", size = 309266 },
+    { url = "https://files.pythonhosted.org/packages/e1/94/d77bd282d3d53155147166c2bbd156f540009b0d7be24330f76286668b90/protobuf-5.27.3-py3-none-any.whl", hash = "sha256:8572c6533e544ebf6899c360e91d6bcbbee2549251643d32c52cf8a5de295ba5", size = 164778 },
+]
+
+[[package]]
+name = "spaceflight"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "temporalio" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "temporalio" }]
+
+[[package]]
+name = "temporalio"
+version = "1.7.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "protobuf" },
+    { name = "types-protobuf" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d5/d2/cd47aef473152366b9de4ae4b7b63ea22e9ba83976f7039b3c5b3c72b7f4/temporalio-1.7.0.tar.gz", hash = "sha256:5057b74df644bd4f5f4eb0e95e730a0a36a16f7ee926d36fcd479c223a7c63cd", size = 1294031 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2e/68/30856377a719a40018b681252162b7d7279e1cec7e5922b92b4546d65b8d/temporalio-1.7.0-cp38-abi3-macosx_10_9_x86_64.whl", hash = "sha256:92ec0a1af8d4b41245df339a422f1f87367742d9638d2dba7bb7d3ab934e7f5d", size = 10342920 },
+    { url = "https://files.pythonhosted.org/packages/cb/ea/a717bd58b9e17bb8caae75621cc117234c1ac44d07486d10dcffd4b6eb8b/temporalio-1.7.0-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:8b4bb77d766a2ac1d85f3e9b682658fee67d77e87f73bd256d46cd79ecf767f6", size = 10067274 },
+    { url = "https://files.pythonhosted.org/packages/5a/1d/6337130fe3733fb7e4fe0aeef9901fc847200ec23b967406a270fb69c72a/temporalio-1.7.0-cp38-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:a38dd43061666700500d5808c18ec0b0f569504a2f22b99d7c38dc4dc50b21fd", size = 10882442 },
+    { url = "https://files.pythonhosted.org/packages/18/d3/f431a39abd43c4e8ba355221cda403c4594d0a3940452b4f5ef0ad77d8aa/temporalio-1.7.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:e0087fb6cdb9e9b8aa62c1705526947cb00a91159435d294f3da0d92b501ed56", size = 10781183 },
+    { url = "https://files.pythonhosted.org/packages/f9/32/5d61ec2a9dcc280efdc62aa5024a34ad953dbc65e45699bc7ba17dc3f3e6/temporalio-1.7.0-cp38-abi3-win_amd64.whl", hash = "sha256:eb45b751c6f7946dccba29260922f0e7192b28b8fb9e2aa5afc2aaf5157891d9", size = 10905989 },
+]
+
+[[package]]
+name = "types-protobuf"
+version = "5.27.0.20240626"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4b/ab/4fe7579d3d64b3ae1def9c8fc57b8633e05edb506517a0b797f3f15c1bc4/types-protobuf-5.27.0.20240626.tar.gz", hash = "sha256:683ba14043bade6785e3f937a7498f243b37881a91ac8d81b9202ecf8b191e9c", size = 54215 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/39/07/7d978dfd97592aa7c9a33f634e38b95ae81099ccf11b3ef97674477a03e4/types_protobuf-5.27.0.20240626-py3-none-any.whl", hash = "sha256:688e8f7e8d9295db26bc560df01fb731b27a25b77cbe4c1ce945647f7024f5c1", size = 68752 },
+]
+
+[[package]]
+name = "typing-extensions"
+version = "4.12.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/df/db/f35a00659bc03fec321ba8bce9420de607a1d37f8342eee1863174c69557/typing_extensions-4.12.2.tar.gz", hash = "sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8", size = 85321 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/26/9f/ad63fc0248c5379346306f8668cda6e2e2e9c95e01216d2b8ffd9ff037d0/typing_extensions-4.12.2-py3-none-any.whl", hash = "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d", size = 37438 },
+]
