@@ -35,7 +35,7 @@ class SampleSensorData(SensorData):
     def get_available_data(self) -> str:
         line = self.data[self.index : self.index + 10]
         self.index += 10
-        return "\n".join(line)
+        return "".join(line)
 
 
 def write_data_periodically(

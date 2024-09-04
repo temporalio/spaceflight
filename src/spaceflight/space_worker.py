@@ -6,7 +6,6 @@ from datetime import timedelta
 import threading
 
 from temporalio import activity, workflow
-from temporalio.client import Client
 from temporalio.worker import Worker
 
 from spaceflight.client import get_client
@@ -97,14 +96,15 @@ async def main():
                     activity_executor=activity_executor,
                 )
                 await worker.run()
-        except RuntimeError:
-            print("Error connecting or with worker")
-            await asyncio.sleep(5)
-            continue
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, asyncio.CancelledError):
             print("Shutting down")
             interrupt_event.set()
             data_thread.join()
+            break
+        except (Exception, RuntimeError) as e:
+            print(f"Error connecting or running worker: {e}")
+            await asyncio.sleep(5)
+            continue
 
 
 if __name__ == "__main__":
