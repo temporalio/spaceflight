@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import queue
 import datetime
 import threading
 from abc import ABC, abstractmethod
@@ -51,15 +52,14 @@ class SampleSensorData(SensorData):
 
 
 def write_data_periodically(
-    interruptor: threading.Event, provider: SensorData, file: str
+    interruptor: threading.Event, provider: SensorData, queue: queue.Queue
 ):
-    with open(file, "a", newline="") as f:
-        while True:
-            line = provider.get_available_data()
-            f.write(line)
-            f.flush()
-            if interruptor.wait(10):
-                break
+    while True:
+        line = provider.get_available_data()
+        for line in line.split("\n"):
+            queue.put(line.strip())
+        if interruptor.wait(10):
+            break
 
 
 def parse_space_data_line(line: List[str]) -> TelemetryRecord | None:

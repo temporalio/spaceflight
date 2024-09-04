@@ -27,12 +27,7 @@ test with sample data:
 python src/spaceflight/space_worker.py /dev/ttyUSB0
 ```
 
+If this prints something like "permission denied", it might need to be run with `sudo` to have
+permissions for the serial port.
+
 Use ctrl-c to stop the script
-
-### Other notes on testing
-
-When running more than once, remove the temporary data file between runs:
-
-```bash
-rm /tmp/sensor_data.csv
-```
