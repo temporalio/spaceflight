@@ -78,6 +78,7 @@ class SpaceWorkflow:
 async def main():
     data_file = "/tmp/sensor_data.csv"
     logging.basicConfig(level=logging.INFO)
+    space_activities = SpaceActivities(data_file)
 
     # Start up the thread for writing sensor data to the file in the background
     interrupt_event = threading.Event()
@@ -87,20 +88,28 @@ async def main():
     )
     data_thread.start()
 
-    client = await Client.connect("localhost:7233")
-    space_activities = SpaceActivities(data_file)
-
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as activity_executor:
-        worker = Worker(
-            client,
-            task_queue="temporal-in-space",
-            workflows=[SpaceWorkflow],
-            activities=[space_activities.obtain_telem_data],
-            activity_executor=activity_executor,
-        )
+    while True:
+        print("Attempting to connect to Temporal")
         try:
-            await worker.run()
-        finally:
+            client = await Client.connect("monolith.local:7233")
+            print("Connected to Temporal")
+            with concurrent.futures.ThreadPoolExecutor(
+                max_workers=4
+            ) as activity_executor:
+                worker = Worker(
+                    client,
+                    task_queue="temporal-in-space",
+                    workflows=[SpaceWorkflow],
+                    activities=[space_activities.obtain_telem_data],
+                    activity_executor=activity_executor,
+                )
+                await worker.run()
+        except RuntimeError:
+            print("Error connecting or with worker")
+            await asyncio.sleep(5)
+            continue
+        except KeyboardInterrupt:
+            print("Shutting down")
             interrupt_event.set()
             data_thread.join()
 
