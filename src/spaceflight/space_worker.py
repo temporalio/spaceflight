@@ -16,7 +16,6 @@ from sensor_data import (
     TelemetryData,
     USBSensorData,
     parse_space_data_line,
-    parse_time,
     write_data_periodically,
 )
 
@@ -26,8 +25,7 @@ class SpaceActivities:
         self.data_queue = data_queue
 
     @activity.defn
-    def obtain_telem_data(self, last_read_str: str) -> TelemetryData:
-        last_read = parse_time(last_read_str) if last_read_str else None
+    def obtain_telem_data(self) -> TelemetryData:
         records = []
 
         all_lines = []
@@ -40,17 +38,9 @@ class SpaceActivities:
             if record is None:
                 print(f"Failed to parse line: {row}")
                 continue
-            if last_read is not None:
-                # Only include entries newer than last_read
-                try:
-                    if parse_time(record.time) > last_read:
-                        records.append(record)
-                except Exception:
-                    print(f"Could not parse time: {record.time}")
-            else:
-                records.append(record)
+            records.append(record)
 
-        activity.logger.info(f"Found {len(records)} new data entries")
+        activity.logger.info(f"Got {len(records)} data entries")
         last_read = records[-1].time if records else None
         return TelemetryData(last_read=last_read, read_records=records)
 
@@ -60,16 +50,12 @@ class SpaceWorkflow:
     @workflow.run
     async def run(self) -> str:
         workflow.logger.info("Running workflow")
-        last_time = ""
         while True:
             try:
-                res = await workflow.execute_local_activity(
+                await workflow.execute_local_activity(
                     SpaceActivities.obtain_telem_data,
-                    last_time,
                     start_to_close_timeout=timedelta(seconds=10),
                 )
-                if res.last_read:
-                    last_time = res.last_read
                 await asyncio.sleep(10)
             except asyncio.CancelledError:
                 break

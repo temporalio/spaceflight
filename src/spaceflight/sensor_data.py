@@ -92,7 +92,3 @@ def parse_space_data_line(line: List[str]) -> TelemetryRecord | None:
         )
     except Exception:
         return None
-
-
-def parse_time(ts: str) -> datetime.time:
-    return datetime.datetime.strptime(ts, "%H:%M:%S").time()
