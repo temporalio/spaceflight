@@ -1,7 +1,5 @@
 import concurrent
 import csv
-from dataclasses import dataclass
-import datetime
 import logging
 import asyncio
 from datetime import timedelta
@@ -11,20 +9,13 @@ from temporalio import activity, workflow
 from temporalio.client import Client
 from temporalio.worker import Worker
 
-from spaceflight.sensor_data import FakeSensorData, write_data_periodically
-
-
-@dataclass
-class TelemetryRecord:
-    time: str  # datetime as isoformat
-    temperature: int
-    altitude: int
-
-
-@dataclass
-class TelemetryData:
-    last_read: str | None  # datetime as isoformat
-    read_records: list[TelemetryRecord]
+from spaceflight.sensor_data import (
+    SampleSensorData,
+    TelemetryData,
+    parse_space_data_line,
+    parse_time,
+    write_data_periodically,
+)
 
 
 class SpaceActivities:
@@ -33,20 +24,23 @@ class SpaceActivities:
 
     @activity.defn
     def obtain_telem_data(self, last_read_str: str) -> TelemetryData:
-        last_read = (
-            datetime.datetime.fromisoformat(last_read_str) if last_read_str else None
-        )
+        last_read = parse_time(last_read_str) if last_read_str else None
         records = []
 
         with open(self.data_file, "r", newline="") as f:
             reader = csv.reader(f, delimiter=",")
             for row in reader:
-                timestamp = datetime.datetime.fromisoformat(row[0])
-                record = TelemetryRecord(row[0], int(row[1]), int(row[2]))
+                record = parse_space_data_line(row)
+                if record is None:
+                    print(f"Failed to parse line: {row}")
+                    continue
                 if last_read is not None:
                     # Only include entries newer than last_read
-                    if timestamp > last_read:
-                        records.append(record)
+                    try:
+                        if parse_time(record.time) > last_read:
+                            records.append(record)
+                    except Exception:
+                        print(f"Could not parse time: {record.time}")
                 else:
                     records.append(record)
 
@@ -84,14 +78,14 @@ async def main():
     interrupt_event = threading.Event()
     data_thread = threading.Thread(
         target=write_data_periodically,
-        args=(interrupt_event, FakeSensorData(), data_file),
+        args=(interrupt_event, SampleSensorData(), data_file),
     )
     data_thread.start()
 
     while True:
         print("Attempting to connect to Temporal")
         try:
-            client = await Client.connect("monolith.local:7233")
+            client = await Client.connect("localhost:7233")
             print("Connected to Temporal")
             with concurrent.futures.ThreadPoolExecutor(
                 max_workers=4

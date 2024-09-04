@@ -11,3 +11,17 @@ which will happen automatically. Once it does, any unwritten data will be flushe
 as the result of the local activity.
 
 ## Running
+
+Create a virtual environment and install dependencies:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install temporalio
+```
+
+Run the worker:
+
+```bash
+python src/spaceflight/space_worker.py
+```
