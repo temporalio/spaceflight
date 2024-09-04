@@ -61,12 +61,12 @@ def parse_space_data_line(line: List[str]) -> TelemetryRecord | None:
     if len(line) < 4:
         return None
     try:
-        gps_longitude = float("nan")
         gps_latitude = float("nan")
+        gps_longitude = float("nan")
         altitude = 0
         if len(line) > 5:
-            gps_longitude = float(line[4])
-            gps_latitude = float(line[5])
+            gps_latitude = float(line[4])
+            gps_longitude = float(line[5])
             altitude = int(line[7])
         return TelemetryRecord(
             data_point=int(line[1]),

@@ -9,6 +9,7 @@ from temporalio import activity, workflow
 from temporalio.client import Client
 from temporalio.worker import Worker
 
+from spaceflight.client import get_client
 from spaceflight.sensor_data import (
     SampleSensorData,
     TelemetryData,
@@ -83,10 +84,8 @@ async def main():
     data_thread.start()
 
     while True:
-        print("Attempting to connect to Temporal")
         try:
-            client = await Client.connect("localhost:7233")
-            print("Connected to Temporal")
+            client = await get_client()
             with concurrent.futures.ThreadPoolExecutor(
                 max_workers=4
             ) as activity_executor:

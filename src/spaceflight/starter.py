@@ -1,13 +1,13 @@
 import asyncio
 
 from temporalio.api.enums.v1 import WorkflowIdReusePolicy
-from temporalio.client import Client
 
+from spaceflight.client import get_client
 from spaceflight.space_worker import SpaceWorkflow
 
 
 async def main():
-    client = await Client.connect("localhost:7233")
+    client = await get_client()
 
     await client.start_workflow(
         SpaceWorkflow.run,
