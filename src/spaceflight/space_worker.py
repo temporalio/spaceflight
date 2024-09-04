@@ -1,4 +1,5 @@
 import concurrent
+import sys
 import csv
 import logging
 import asyncio
@@ -12,6 +13,7 @@ from spaceflight.client import get_client
 from spaceflight.sensor_data import (
     SampleSensorData,
     TelemetryData,
+    USBSensorData,
     parse_space_data_line,
     parse_time,
     write_data_periodically,
@@ -74,11 +76,17 @@ async def main():
     logging.basicConfig(level=logging.INFO)
     space_activities = SpaceActivities(data_file)
 
-    # Start up the thread for writing sensor data to the file in the background
+    datasource = sys.argv[1] if len(sys.argv) > 1 else "sample"
+    print(f"Using data source: {datasource}")
+    if datasource == "sample":
+        datasource = SampleSensorData()
+    else:
+        datasource = USBSensorData(datasource)
+    # Start up the thread for writing sensor data to the temp file in the background
     interrupt_event = threading.Event()
     data_thread = threading.Thread(
         target=write_data_periodically,
-        args=(interrupt_event, SampleSensorData(), data_file),
+        args=(interrupt_event, datasource, data_file),
     )
     data_thread.start()
 

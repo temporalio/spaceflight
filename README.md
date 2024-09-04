@@ -18,10 +18,19 @@ Create a virtual environment and install dependencies:
 python3 -m venv .venv
 source .venv/bin/activate
 pip install temporalio
+pip install pyserial
 ```
 
-Run the worker:
+Run the worker, providing the serial device as an argument. Do not provide the device path to
+test with sample data:
+```bash
+python src/spaceflight/space_worker.py /dev/ttyUSB0
+```
+
+### Other notes on testing
+
+When running more than once, remove the temporary data file between runs:
 
 ```bash
-python src/spaceflight/space_worker.py
+rm /tmp/sensor_data.csv
 ```

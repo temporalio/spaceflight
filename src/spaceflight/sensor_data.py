@@ -3,6 +3,7 @@ import datetime
 import threading
 from abc import ABC, abstractmethod
 from typing import List
+import serial
 
 
 @dataclass
@@ -24,6 +25,17 @@ class SensorData(ABC):
     @abstractmethod
     def get_available_data(self) -> str:
         pass
+
+
+class USBSensorData(SensorData):
+    def __init__(self, device: str):
+        self.device = device
+
+    def get_available_data(self) -> str:
+        # TODO: No idea what the baudrate is
+        with serial.Serial(self.device, 9600, timeout=2) as ser:
+            data = ser.readlines()
+        return "".join([line.decode("utf-8", errors="replace") for line in data])
 
 
 class SampleSensorData(SensorData):
