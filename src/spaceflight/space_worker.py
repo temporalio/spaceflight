@@ -9,8 +9,8 @@ import threading
 from temporalio import activity, workflow
 from temporalio.worker import Worker
 
-from spaceflight.client import get_client
-from spaceflight.sensor_data import (
+from client import get_client
+from sensor_data import (
     SampleSensorData,
     TelemetryData,
     USBSensorData,

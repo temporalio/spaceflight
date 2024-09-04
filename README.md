@@ -27,6 +27,8 @@ test with sample data:
 python src/spaceflight/space_worker.py /dev/ttyUSB0
 ```
 
+Use ctrl-c to stop the script
+
 ### Other notes on testing
 
 When running more than once, remove the temporary data file between runs:

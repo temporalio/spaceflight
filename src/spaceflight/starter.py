@@ -2,8 +2,8 @@ import asyncio
 
 from temporalio.api.enums.v1 import WorkflowIdReusePolicy
 
-from spaceflight.client import get_client
-from spaceflight.space_worker import SpaceWorkflow
+from client import get_client
+from space_worker import SpaceWorkflow
 
 
 async def main():
